@@ -84,7 +84,11 @@ schedule.every(1).minutes.do(
 )
 
 print(
-    "Scheduler started."
+    
+"Scheduler started."
+)
+schedule.every().day.at("07:00").do(
+    morning_news
 )
 
 while True:
