@@ -7,7 +7,7 @@ def get_news(category):
     url = (
         "https://newsapi.org/v2/top-headlines"
         f"?category={category}"
-        "&country=us"
+        "&country=de"
         f"&apiKey={NEWS_API_KEY}"
     )
 
