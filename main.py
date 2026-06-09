@@ -1,19 +1,27 @@
 import schedule
 import time
+import pytz
+
+from datetime import datetime
 
 from news import get_news
 from ai_summary import summarize
 from whatsapp import send_whatsapp
 
+GERMANY_TZ = pytz.timezone(
+    "Europe/Berlin"
+)
+
+last_sent_date = None
 
 def morning_news():
 
-    print("Fetching news...")
+    print(
+        "Fetching latest news..."
+    )
 
     sports = get_news("sports")
-
     politics = get_news("general")
-
     ai_news = get_news("technology")
 
     combined_news = f"""
@@ -30,25 +38,57 @@ AI
 {ai_news}
 """
 
-    print("Generating summary...")
+    print(
+        "Generating AI summary..."
+    )
 
-    summary = summarize(combined_news)
+    summary = summarize(
+        combined_news
+    )
 
-    print("Sending WhatsApp message...")
+    print(
+        "Sending WhatsApp message..."
+    )
 
     send_whatsapp(summary)
 
-    print("Done")
+    print(
+        "News sent successfully."
+    )
 
+def germany_scheduler():
 
-# Run once immediately
-morning_news()
+    global last_sent_date
 
-# Schedule every day at 07:00
-schedule.every().day.at("07:00").do(
-    morning_news
+    germany_now = datetime.now(
+        GERMANY_TZ
+    )
+
+    current_date = germany_now.date()
+
+    current_time = germany_now.strftime(
+        "%H:%M"
+    )
+
+    if (
+        current_time == "08:30"
+        and last_sent_date != current_date
+    ):
+
+        morning_news()
+
+        last_sent_date = current_date
+
+schedule.every(1).minutes.do(
+    germany_scheduler
+)
+
+print(
+    "Scheduler started."
 )
 
 while True:
+
     schedule.run_pending()
-    time.sleep(60)
+
+    time.sleep(30)
