@@ -91,8 +91,5 @@ schedule.every().day.at("07:00").do(
     morning_news
 )
 
-while True:
-
-    schedule.run_pending()
-
-    time.sleep(30)
+if __name__ == "__main__":
+    morning_news()
