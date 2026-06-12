@@ -93,3 +93,9 @@ schedule.every().day.at("07:00").do(
 
 if __name__ == "__main__":
     morning_news()
+if __name__ == "__main__":
+    print("Bot started")
+
+    while True:
+        schedule.run_pending()
+        time.sleep(30)
